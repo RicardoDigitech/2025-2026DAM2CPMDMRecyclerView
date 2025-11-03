@@ -30,12 +30,37 @@ public class ToDoAdapter extends RecyclerView.Adapter<ToDoAdapter.ToDoVH> {
     @Override
     public ToDoVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View toDoView = LayoutInflater.from(context).inflate(resource, null);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        toDoView.setLayoutParams(lp);
         return new ToDoVH(toDoView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ToDoVH holder, int position) {
+        ToDoModel td = objects.get(position);
+        holder.lblTitulo.setText(td.getTitulo());
+        holder.lblContenido.setText(td.getContenido());
+        holder.lblFecha.setText(td.getFecha().toString());
+        if (td.isCompletado()) {
+            holder.btnCompletado.setImageResource(
+                    android.R.drawable.checkbox_on_background
+            );
+        } else {
+            holder.btnCompletado.setImageResource(
+                    android.R.drawable.checkbox_off_background
+            );
+        }
 
+        holder.btnCompletado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                td.setCompletado(!td.isCompletado());
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
